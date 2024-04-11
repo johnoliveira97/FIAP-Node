@@ -18,6 +18,6 @@ export async function loadTask() {
     return data;
     /*return [
         {id: 1, title: "Task 01"},
-        {id: 2, title: "Task 02"}
+        {id: 2, title: "Task 02"} 
     ];*/
 }
