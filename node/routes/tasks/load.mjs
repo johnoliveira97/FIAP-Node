@@ -13,7 +13,6 @@ async function openDb () {
 export async function loadTask() {
     const db = await openDb();
     const data = await db.all('SELECT * FROM tasks');
-    console.log(data);
 
     return data;
     /*return [

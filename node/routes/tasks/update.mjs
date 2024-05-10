@@ -20,8 +20,6 @@ export async function updateTask(taskId, updatedData) {
             await db.close();
             return 'Os valores recebidos são iguais aos valores atuais. Nenhuma alteração foi feita.';
         }
-        console.log(updatedData);
-
         await db.run('UPDATE tasks SET title = ?, completed_at = ?, completed = ? WHERE id = ?', 
                     [updatedData.title, updatedData.dueDate, updatedData.status, taskId]);
         await db.close();
@@ -48,7 +46,6 @@ export async function getTaskById(taskId) {
 }
 
 function isDifferentValues(currentTask, updatedData) {
-    console.log(currentTask);
     if (updatedData.title === null || updatedData.title === "" || updatedData.title === undefined) {
         updatedData.title = currentTask.title;
     }
@@ -62,7 +59,6 @@ function isDifferentValues(currentTask, updatedData) {
     }
 
     const status = currentTask.completed === 1 ? true : false;
-    console.log(status);
     if (updatedData.title !== currentTask.title 
         || updatedData.dueDate !== currentTask.completed_at
         || updatedData.status !== status) {

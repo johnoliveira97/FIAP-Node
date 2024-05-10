@@ -10,17 +10,12 @@ async function openDb () {
 }
 
 export async function createTask(payload) {
-    console.log('Create task...', payload);
-
     const { title, dueDate, status } = payload;
 
     try {
         const db = await openDb();
         await db.run('INSERT INTO tasks (title, completed_at, completed) VALUES (?, ?, ?)', [title, dueDate, status]);
-
-        console.log('Tarefa criada com sucesso ID: ${this.lastID}');
         await db.close();
-
     } catch {
         console.error('Erro ao criar tarefa:', error);
         throw new Error('Erro ao criar tarefa');
