@@ -1,16 +1,19 @@
-// server.mjs
 import express from 'express';
 import { createTask } from './routes/tasks/create.mjs';
 import { loadTask } from './routes/tasks/load.mjs';
+import { validateUser } from './routes/tasks/login.mjs';
+import { updateTask } from './routes/tasks/update.mjs';
 
 const app = express();
 
 app.use(express.json());
 
 app.post('/tasks', async (req, res, next) => {
-    console.log('chegou um POST');
+    const { title, dueDate, status } = req.body;
     await createTask({
-        title: req.body.title
+        title: title,
+        dueDate: dueDate,
+        status: status
     })
 
     res.status(201).end();
@@ -25,20 +28,35 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-app.listen(3000, () => {
-    console.log('Node, com express, em execução na porta 3000');
+app.put('/tasks/:id', async (req, res) => {
+    const taskId = req.params.id;
+    const { status } = req.body;
+
+    try {
+        await updateTask(taskId, { status });
+
+        res.status(200).json({ message: 'Tarefa concluída com sucesso' });
+    } catch (error) {
+        console.error('Erro ao concluir tarefa:', error);
+        res.status(500).json({ error: 'Erro ao concluir tarefa' });
+    }
 });
 
-/*import { createServer } from 'node:http';
-
-const server = createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Hello World!\n');
+app.listen(8888, () => {
+    console.log('Node, com express, em execução na porta 8888');
 });
 
-// starts a simple http server locally on port 3000
-server.listen(3000, '127.0.0.1', () => {
-  console.log('Listening on 127.0.0.1:3000');
-});*/
-
-// run with `node server.mjs`
+app.post('/login', async (req, res) => {
+    console.log('chegou um POST');
+    const isValid = await validateUser({
+        password: req.body.password
+    })
+    
+    console.log("isValid: ", isValid);
+    
+    if (isValid) {
+        res.status(200).end();
+    } else {
+        res.status(401).json({ error: 'Usuário ou senha incorretos' });
+    }
+});
