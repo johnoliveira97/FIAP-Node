@@ -28,17 +28,16 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-app.put('/tasks/:id', async (req, res) => {
+app.patch('/tasks/:id', async (req, res) => {
     const taskId = req.params.id;
-    const { status } = req.body;
+    const { title, dueDate, status } = req.body;
 
     try {
-        await updateTask(taskId, { status });
-
-        res.status(200).json({ message: 'Tarefa concluída com sucesso' });
+        const message = await updateTask(taskId, { title, dueDate, status });
+        res.status(200).json({ message: message });
     } catch (error) {
-        console.error('Erro ao concluir tarefa:', error);
-        res.status(500).json({ error: 'Erro ao concluir tarefa' });
+        console.error('Erro ao editar tarefa:', error);
+        res.status(500).json({ error: 'Erro ao editar tarefa' });
     }
 });
 
