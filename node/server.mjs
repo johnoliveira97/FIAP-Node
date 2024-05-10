@@ -46,12 +46,9 @@ app.listen(8888, () => {
 });
 
 app.post('/login', async (req, res) => {
-    console.log('chegou um POST');
     const isValid = await validateUser({
         password: req.body.password
     })
-    
-    console.log("isValid: ", isValid);
     
     if (isValid) {
         res.status(200).end();
