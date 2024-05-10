@@ -53,8 +53,8 @@ app.post('/login', async (req, res) => {
     })
     
     if (isValid) {
-        res.status(200).end();
+        res.status(200).json({ message: "Login efetuado com sucesso!"});
     } else {
-        res.status(401).json({ error: 'Usuário ou senha incorretos' });
+        res.status(401).json({ error: 'Usuário ou senha incorretos!' });
     }
 });
